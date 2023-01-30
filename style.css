@@ -26,3 +26,23 @@ ul li:hover{
     padding: 5px;
     text-align: center;
 }
+.edit{
+    position: absolute;
+    right: 40px;
+    padding: 5px;
+    
+}
+.edit:hover {
+    background-color: green;
+    color: white;
+}
+.delete{
+    position: absolute;
+    right: 10px;
+    padding: 5px;
+    
+}
+.delete:hover {
+    background-color: red;
+    color: white;
+}
