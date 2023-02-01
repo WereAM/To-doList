@@ -13,10 +13,23 @@ input{
     font-size: 15px;
     margin-right: 5px;
 }
+ul{
+    list-style: none;
+}
+ul div{
+    max-width: 50%;
+    position: relative;
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    background-color: aliceblue;
+    margin-bottom: 5px;
+    padding: 2px 6px;
+
+}   
 ul li{
     margin: 1px;
     padding: 15px;
-    background-color: aliceblue;
     font-size: 20px;
 }
 ul li:hover{
@@ -28,8 +41,9 @@ ul li:hover{
 }
 .edit{
     position: absolute;
-    right: 40px;
+    right: 50px;
     padding: 5px;
+    cursor: pointer;
     
 }
 .edit:hover {
@@ -38,11 +52,12 @@ ul li:hover{
 }
 .delete{
     position: absolute;
-    right: 10px;
+    right: 5px;
     padding: 5px;
     
 }
 .delete:hover {
     background-color: red;
     color: white;
+    cursor: pointer;
 }
