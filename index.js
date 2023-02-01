@@ -1,6 +1,7 @@
 let addBtn = document.getElementById("add");
 let listItems = document.getElementById("listItems");
 let inputValue = document.getElementById("addItem"); 
+let errorMsg = document.getElementById("error");
 
 function toDo(){
     // Add a new item
@@ -8,15 +9,20 @@ function toDo(){
         const listContainer = document.createElement("div");
         const listItem = document.createElement("li");
         listItem.innerText = inputValue.value;
+        listItem.addEventListener('click', markFxn);
+        listItem.addEventListener('dblclick', unmarkFxn);
         listContainer.id = Math.floor(Math.random()*100);
         // listContainer.id =  inputValue.value
         if(!listItem.innerText){
-            alert('Enter an item');
+            errorMsg.textContent = "Enter an item"
+            // alert('Enter an item');
         } else {
+            errorMsg.textContent='';
             //Create edit button
-            var edit = document.createElement("edit");
-            var text = document.createTextNode("\u270E");
+            const edit = document.createElement("edit");
+            const text = document.createTextNode("\u270E");
             edit.className = "edit";
+            edit.addEventListener('click', editFxn);
             edit.appendChild(text);
     
             // Create delete button
@@ -34,14 +40,6 @@ function toDo(){
         inputValue.value="";
     })
 
-    // // To mark items as done
-    // listItem.addEventListener('click', function(){
-    //     listItem.style.textDecoration = "line-through";
-    // }) 
-    // listItem.addEventListener('dblclick', function(){
-    //     listItems.style.textDecoration = "none";
-    // })
-
     // Enter key to add
     inputValue.addEventListener('keypress', function(e){
         if(e.key === "Enter"){
@@ -49,19 +47,69 @@ function toDo(){
         }
     })
 
+    // To mark items as done/undone
+    function markFxn(e){
+        const listItem = e.target;
+        listItem.style.textDecoration = "line-through";
+    }
+    function unmarkFxn(e){
+        const listItem = e.target;
+        listItem.style.textDecoration = "none";
+    }  
+
     // To delete
     function deleteFxn(event){
-        console.log(event.target);
-        const del = event.target;
-        // const listContainer = document.getElementById();
-        del.parentElement.remove()
+        // console.log(event.target);
+        const item = event.target;
+        item.parentElement.remove()
+    }
+
+    // To edit
+    function editFxn(event){
+        // console.log(event.target);
+        const item = event.target;
+        const listContainer = item.parentElement;
+        // console.log(itemDiv);
+        const list = listContainer.childNodes[0];
+        const listItem = list.innerText;
+        // console.log(listItem);
+        // console.log(list);
+        // const editor = document.createElement("div");
+        const editInput = document.createElement("input");
+        editInput.className = "editInput";
+        const newValue = document.createElement("li");
+        const saveEdit = document.createElement("button");
+        const text = document.createTextNode("\u2713");
+        saveEdit.className = "saveEdit";
+        saveEdit.addEventListener('click', saveFxn);
+        saveEdit.appendChild(text);
+        listContainer.appendChild(editInput);
+        listContainer.appendChild(saveEdit);
+        // listContainer.appendChild(editor);
+
+        function saveFxn(){
+            newValue.innerText = editInput.value;
+            if(!newValue.innerText){
+                errorMsg.textContent = "Enter an item";
+            }
+            else{
+                errorMsg.textContent='';
+                listContainer.replaceChild(newValue, list);   
+                listContainer.removeChild(editInput);
+                listContainer.removeChild(saveEdit); 
+                console.log(newValue);   
+                }  
+            }
+
+            editInput.addEventListener('keypress', function(e){
+                if(e.key === "Enter"){
+                    saveEdit.click();
+                }
+            })
     }
 }
 
 toDo();
-
-
-
 
 
 //Add a new item

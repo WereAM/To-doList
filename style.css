@@ -31,6 +31,7 @@ ul li{
     margin: 1px;
     padding: 15px;
     font-size: 20px;
+    color: black;
 }
 ul li:hover{
     background-color:antiquewhite;
@@ -60,4 +61,18 @@ ul li:hover{
     background-color: red;
     color: white;
     cursor: pointer;
+}
+#error{
+    color: red;
+}
+.editInput{
+    width: 30%;
+    padding: 5px;
+    float: bottom;
+    font-size: 15px;
+    margin-right: 5px;
+}
+.saveEdit{
+    padding: 5px;
+    text-align: center;
 }
