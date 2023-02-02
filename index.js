@@ -7,13 +7,13 @@ function toDo(){
     // Add a new item
     addBtn.addEventListener('click', function(){
         const listContainer = document.createElement("div");
-        const listItem = document.createElement("li");
-        listItem.innerText = inputValue.value;
+        var listItem = document.createElement("li");
+        // listItem.innerText = inputValue.value;
         listItem.addEventListener('click', markFxn);
         listItem.addEventListener('dblclick', unmarkFxn);
         listContainer.id = Math.floor(Math.random()*100);
         // listContainer.id =  inputValue.value
-        if(!listItem.innerText){
+        if(!inputValue.value){
             errorMsg.textContent = "Enter an item"
             // alert('Enter an item');
         } else {
@@ -32,6 +32,8 @@ function toDo(){
             del.addEventListener('click', deleteFxn);
             del.appendChild(txt);
     
+            localStorage.setItem(listContainer.id, inputValue.value);
+            listItem.innerHTML = localStorage.getItem(listContainer.id);
             listContainer.appendChild(listItem);
             listContainer.appendChild(edit);
             listContainer.appendChild(del);
@@ -61,6 +63,7 @@ function toDo(){
     function deleteFxn(event){
         // console.log(event.target);
         const item = event.target;
+        // localStorage.removeItem(listContainer.id);
         item.parentElement.remove()
     }
 
@@ -97,7 +100,7 @@ function toDo(){
                 listContainer.replaceChild(newValue, list);   
                 listContainer.removeChild(editInput);
                 listContainer.removeChild(saveEdit); 
-                console.log(newValue);   
+                // console.log(newValue);   
                 }  
             }
 
