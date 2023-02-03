@@ -4,15 +4,14 @@ let inputValue = document.getElementById("addItem");
 let errorMsg = document.getElementById("error");
 
 function toDo(){
+
     // Add a new item
     addBtn.addEventListener('click', function(){
         const listContainer = document.createElement("div");
         var listItem = document.createElement("li");
-        // listItem.innerText = inputValue.value;
         listItem.addEventListener('click', markFxn);
         listItem.addEventListener('dblclick', unmarkFxn);
         listContainer.id = Math.floor(Math.random()*100);
-        // listContainer.id =  inputValue.value
         if(!inputValue.value){
             errorMsg.textContent = "Enter an item"
             // alert('Enter an item');
@@ -40,6 +39,9 @@ function toDo(){
             listItems.appendChild(listContainer);
         }
         inputValue.value="";
+
+        // To display list
+    
     })
 
     // Enter key to add
@@ -63,8 +65,9 @@ function toDo(){
     function deleteFxn(event){
         // console.log(event.target);
         const item = event.target;
-        // localStorage.removeItem(listContainer.id);
-        item.parentElement.remove()
+        const listContainer = item.parentElement;
+        localStorage.removeItem(listContainer.id);
+        listContainer.remove();
     }
 
     // To edit
@@ -91,12 +94,13 @@ function toDo(){
         // listContainer.appendChild(editor);
 
         function saveFxn(){
-            newValue.innerText = editInput.value;
-            if(!newValue.innerText){
+            if(!editInput.value){
                 errorMsg.textContent = "Enter an item";
             }
             else{
                 errorMsg.textContent='';
+                localStorage.setItem(listContainer.id, editInput.value);
+                newValue.innerHTML = localStorage.getItem(listContainer.id);
                 listContainer.replaceChild(newValue, list);   
                 listContainer.removeChild(editInput);
                 listContainer.removeChild(saveEdit); 
