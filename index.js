@@ -5,6 +5,8 @@ let errorMsg = document.getElementById("error");
 
 function toDo(){
 
+    document.addEventListener('DOMContentLoaded', displayTodos)
+
     // Add a new item
     addBtn.addEventListener('click', function(){
         const listContainer = document.createElement("div");
@@ -17,6 +19,8 @@ function toDo(){
             // alert('Enter an item');
         } else {
             errorMsg.textContent='';
+            // Save to local
+            saveLocal(inputValue.value);
             //Create edit button
             const edit = document.createElement("edit");
             const text = document.createTextNode("\u270E");
@@ -31,16 +35,14 @@ function toDo(){
             del.addEventListener('click', deleteFxn);
             del.appendChild(txt);
     
-            localStorage.setItem(listContainer.id, inputValue.value);
-            listItem.innerHTML = localStorage.getItem(listContainer.id);
+            // localStorage.setItem('todo', inputValue.value);
+            listItem.innerHTML = inputValue.value;
             listContainer.appendChild(listItem);
             listContainer.appendChild(edit);
             listContainer.appendChild(del);
             listItems.appendChild(listContainer);
         }
         inputValue.value="";
-
-        // To display list
     
     })
 
@@ -64,9 +66,10 @@ function toDo(){
     // To delete
     function deleteFxn(event){
         // console.log(event.target);
-        const item = event.target;
-        const listContainer = item.parentElement;
-        localStorage.removeItem(listContainer.id);
+        const btn = event.target;
+        const listContainer = btn.parentElement;
+        // const listItem = listContainer.children[0];
+        deleteLocal(listContainer);
         listContainer.remove();
     }
 
@@ -77,10 +80,6 @@ function toDo(){
         const listContainer = item.parentElement;
         // console.log(itemDiv);
         const list = listContainer.childNodes[0];
-        const listItem = list.innerText;
-        // console.log(listItem);
-        // console.log(list);
-        // const editor = document.createElement("div");
         const editInput = document.createElement("input");
         editInput.className = "editInput";
         const newValue = document.createElement("li");
@@ -91,7 +90,6 @@ function toDo(){
         saveEdit.appendChild(text);
         listContainer.appendChild(editInput);
         listContainer.appendChild(saveEdit);
-        // listContainer.appendChild(editor);
 
         function saveFxn(){
             if(!editInput.value){
@@ -99,20 +97,101 @@ function toDo(){
             }
             else{
                 errorMsg.textContent='';
-                localStorage.setItem(listContainer.id, editInput.value);
-                newValue.innerHTML = localStorage.getItem(listContainer.id);
+                // editLocal(listContainer);
+                // localStorage.setItem('todo', editInput.value);
+                newValue.innerHTML = editInput.value;
                 listContainer.replaceChild(newValue, list);   
                 listContainer.removeChild(editInput);
                 listContainer.removeChild(saveEdit); 
-                // console.log(newValue);   
-                }  
-            }
+                // console.log(newValue);
+            }  
+        }
 
-            editInput.addEventListener('keypress', function(e){
+        editInput.addEventListener('keypress', function(e){
                 if(e.key === "Enter"){
                     saveEdit.click();
                 }
-            })
+        })
+    }
+
+    // Save to local storage
+    function saveLocal(item){
+        let todo;
+        if(localStorage.getItem('todo') === null){
+            todo = [];
+        }else{
+            todo = JSON.parse(localStorage.getItem('todo'));
+        }
+
+        todo.push(item);
+        localStorage.setItem('todo', JSON.stringify(todo));
+    }
+
+    // // Edit local storage
+    // function editLocal(editInput){
+    //     let todo;
+    //     if(localStorage.getItem('todo') === null){
+    //         todo = [];
+    //     }else{
+    //         todo = JSON.parse(localStorage.getItem('todo'));
+    //     }
+
+    //     const listItem = listContainer.children[0].innerText;
+    //     const newValue = editInput.value;
+    //     todo.splice(todo.indexOf(listItem), 1, newValue);
+    //     localStorage.setItem('todo', JSON.stringify(todo));
+    // }
+
+    // Retrieve from local storage
+    function displayTodos(){
+        let todo;
+        if(localStorage.getItem('todo') === null){
+            todo = [];
+        }else{
+            todo = JSON.parse(localStorage.getItem('todo'));
+        }
+
+        todo.forEach(function(item){
+            const listContainer = document.createElement("div");
+            var listItem = document.createElement("li");
+            listItem.addEventListener('click', markFxn);
+            listItem.addEventListener('dblclick', unmarkFxn);
+        
+            //Create edit button
+            const edit = document.createElement("edit");
+            const text = document.createTextNode("\u270E");
+            edit.className = "edit";
+            edit.addEventListener('click', editFxn);
+            edit.appendChild(text);
+    
+            // Create delete button
+            const del = document.createElement("delete");
+            const txt = document.createTextNode("\u00D7");
+            del.className = "delete";
+            del.addEventListener('click', deleteFxn);
+            del.appendChild(txt);
+    
+            listItem.innerHTML = item;
+            listContainer.appendChild(listItem);
+            listContainer.appendChild(edit);
+            listContainer.appendChild(del);
+            listItems.appendChild(listContainer);
+        })
+    }
+
+    // Delete from local storage
+    function deleteLocal(listContainer){
+        let todo;
+        if(localStorage.getItem('todo') === null){
+            todo = [];
+        }else{
+            todo = JSON.parse(localStorage.getItem('todo'));
+        }
+        
+        const listItem = listContainer.children[0].innerText;
+        // console.log(item)
+        todo.splice(todo.indexOf(listItem), 1);
+        localStorage.setItem('todo', JSON.stringify(todo));
     }
 }
 
